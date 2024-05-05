@@ -50,14 +50,19 @@
                     <p>Exemplo</p>
                 </div>
                 <div class="actions">
-                    <button class="btn-icon edit" onclick="editTodo(this.parentElement.parentElement)">
+                    <button id="edit-item-btn" class="btn-icon edit" onclick="editTodo(this.parentElement.parentElement)">
                         <i class="material-symbols-outlined">
                             edit
                         </i>
                     </button>
-                    <button class="btn-icon delete" onclick="removeTodo(this.parentElement.parentElement)">
+                    <button id="remove-item-btn" class="btn-icon delete" onclick="removeTodo(this.parentElement.parentElement)">
                         <i class="material-symbols-outlined">
                             delete
+                        </i>
+                    </button>
+                    <button id="cancel-item-btn" class="btn-icon cancel hide" onclick="resetForm()">
+                        <i class="material-symbols-outlined">
+                            cancel
                         </i>
                     </button>
                 </div>

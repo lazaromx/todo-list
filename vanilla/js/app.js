@@ -6,20 +6,30 @@ const todoList = $("#todo-list");
 const todoEl = $("p");
 const todoForm = $("#todo-form");
 const saveBtn = $("#save-btn");
-let editLabel;
 
-  saveBtn.addEventListener("click", () => {
-    editLabel.textContent = inputAdd.value;
-    console.log("qualquer coisa")
-    resetForm();
-  });
+let editing = {
+  label: null,
+  editBtn: null,
+  removeBtn: null,
+  cancelBtn: null,
+};
+
+saveBtn.addEventListener("click", () => {
+  editing.label.textContent = inputAdd.value;
+  resetForm();
+});
 
 function makeHtmlButton(icon, className, event) {
-  const button = `<button class="btn-icon ${className}" onclick="${event}">
-    <i class="material-symbols-outlined">${icon}</i>
-  </button>`;
+  // const button = `<button class="btn-icon ${className}" onclick="${event}">
+  //   <i class="material-symbols-outlined">${icon}</i>
+  // </button>`;
+  icon = `<i class="material-symbols-outlined">${icon}</i>`;
+  const btn = document.createElement("button");
+  btn.setAttribute("class", `btn-icon ${className}`);
+  btn.setAttribute("onclick", event);
+  btn.innerHTML = icon;
 
-  return button;
+  return btn;
 }
 
 function addTodo(text) {
@@ -36,20 +46,16 @@ function addTodo(text) {
     "toggleCheck(this)"
   );
 
-  description.innerHTML = `${finishButton}<p>${text}</p>`;
+  description.innerHTML = `${finishButton.outerHTML}<p>${text}</p>`;
 
-  // const finishButton = document.createElement("button");
-  // finishButton.classList.add("finish-todo");
-  // finishButton.innerHTML = '<i class="material-symbols-outlined">check</i>';
-
-  // const todoTitle = document.createElement("p");
-  // todoTitle.classList.add("todo-item");
-  // todoTitle.innerText = text;
-
-  const actions = document.createElement("div"); //.addClass("description");
+  const actions = document.createElement("div");
   actions.classList.add("actions");
 
-  const editButton = makeHtmlButton("edit", "edit", "editTodo(this.parentElement.parentElement)"); 
+  const editButton = makeHtmlButton(
+    "edit",
+    "edit",
+    "editTodo(this.parentElement.parentElement)"
+  );
 
   const removeButton = makeHtmlButton(
     "delete",
@@ -57,7 +63,11 @@ function addTodo(text) {
     "removeTodo(this.parentElement.parentElement)"
   );
 
-  actions.innerHTML = `${editButton}${removeButton}`;
+  const cancelButton = makeHtmlButton("cancel", "cancel hide", "resetForm()");
+
+  actions.appendChild(editButton);
+  actions.appendChild(removeButton);
+  actions.appendChild(cancelButton);
 
   todoItem.appendChild(description);
   todoItem.appendChild(actions);
@@ -68,35 +78,55 @@ function addTodo(text) {
 }
 
 function toggleCheck(button) {
-  console.log(button);
   const icon = button.children[0];
 
   const todoItem = button.parentElement.parentElement;
 
-  // const pendent = button.classList.contains("pendent-todo");
-  // button.classList.remove(pendent ? "pendent-todo" : "finish-todo");
-  // button.classList.add(pendent ? "finish-todo" : "pendent-todo");
-
   todoItem.classList.toggle("done");
   button.classList.toggle("done");
-  icon.innerHTML = button.classList.contains("done") ? "check_circle" : "radio_button_unchecked";
+  const isDone = button.classList.contains("done");
+  icon.innerHTML = isDone ? "check_circle" : "radio_button_unchecked";
 
+  const filterSelect = $("#filter-select");
+  if (filterSelect.value === "todo") {
+    if (isDone) {
+      todoItem.classList.add("hide");
+    } else {
+      todoItem.classList.remove("hide");
+    }
+  }
+
+  if (filterSelect.value === "done") {
+    if (!isDone) {
+      todoItem.classList.add("hide");
+    } else {
+      todoItem.classList.remove("hide");
+    }
+  }
 }
 
 function removeTodo(todoItem) {
-  console.log(todoItem);
   todoItem.remove();
 }
 
 function editTodo(todoItem) {
-  console.log("editTodo");
-  editLabel = todoItem.querySelector("p");
-  inputAdd.value = editLabel.textContent;
+  resetForm();
+
+  editing.label = todoItem.querySelector("p");
+  inputAdd.value = editing.label.textContent;
   inputAdd.focus();
   $("#add-button").classList.add("hide");
   $("#cancel-btn").classList.remove("hide");
+
+  editing.editBtn = todoItem.querySelector(".btn-icon.edit");
+  editing.removeBtn = todoItem.querySelector(".btn-icon.delete");
+  editing.cancelBtn = todoItem.querySelector(".btn-icon.cancel");
+
+  editing.editBtn.classList.add("hide");
+  editing.removeBtn.classList.add("hide");
+  editing.cancelBtn.classList.remove("hide");
+
   saveBtn.classList.remove("hide");
-  
 }
 
 function resetForm() {
@@ -104,10 +134,15 @@ function resetForm() {
   $("#cancel-btn").classList.add("hide");
   $("#save-btn").classList.add("hide");
   $("#add-button").classList.remove("hide");
+
+  if (editing.editBtn) {
+    editing.editBtn.classList.remove("hide");
+    editing.removeBtn.classList.remove("hide");
+    editing.cancelBtn.classList.add("hide");
+  }
 }
 
 function filterTodos() {
-  console.log("to aqui")
   const todos = todoList.querySelectorAll(".todo-item");
   const filterSelect = $("#filter-select");
   todos.forEach((todo) => {
@@ -118,17 +153,15 @@ function filterTodos() {
       case "done":
         if (!todo.classList.contains("done")) {
           todo.classList.add("hide");
-        }
-        else(todo.classList.remove("hide"))
+        } else todo.classList.remove("hide");
         break;
       case "todo":
         if (todo.classList.contains("done")) {
           todo.classList.add("hide");
-        }
-        else(todo.classList.remove("hide"))
+        } else todo.classList.remove("hide");
         break;
     }
-  });  
+  });
 }
 
 todoForm.addEventListener("submit", (e) => {
