@@ -105,8 +105,12 @@ function toggleCheck(button) {
   }
 }
 
-function removeTodo(todoItem) {
-  todoItem.remove();
+function removeTodo(todoItem){
+  todoItem.classList.add("slideOutLeft");
+
+  setTimeout(() => {
+    todoItem.remove();
+  },400);
 }
 
 function editTodo(todoItem) {
@@ -172,16 +176,3 @@ todoForm.addEventListener("submit", (e) => {
     addTodo(inputAdd.value);
   }
 });
-
-// todoList.addEventListener("click", (e) => {
-//   console.log("clicou");
-//   const target = e.target;
-//   const parentEl = target.closest("button");
-//   const parentDiv = parentEl.closest(".todo-item");
-//   if(parentEl.classList.contains("pendent-todo") || parentEl.classList.contains("finish-todo")){
-//     toggleCheck(target);
-//   }
-//   if(parentEl.classList.contains("remove-todo")){
-//     parentDiv.remove();
-//   }
-// })
