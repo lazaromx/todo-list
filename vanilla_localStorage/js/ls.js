@@ -10,30 +10,47 @@ export class LocalBase{
 
     addItem(item){
         const items = this.getItems();
+        item.id = new Date().getTime();
         items.push(item);
         localStorage.setItem(this.collectionName, JSON.stringify(items));
 
         return item;
     }
 
-    deleteItem(itemLabel){
+    saveItem(item){
         const items = this.getItems();
-        const itemsIndex = items.findIndex((p) => p.label === itemLabel);
-		if (itemsIndex !== -1) {
-			items.splice(itemsIndex, 1);
+        const itemIndex = items.findIndex((p) => p.id == item.id);
+        if (itemIndex !== -1) {
+            items[itemIndex] = item;
+            localStorage.setItem(this.collectionName, JSON.stringify(items))
+            return true;
+        }
+        return false;
+    }
+
+    deleteItem(itemId){
+        const items = this.getItems();
+        const itemIndex = items.findIndex((p) => p.id == itemId);
+		if (itemIndex !== -1) {
+			items.splice(itemIndex, 1);
 			localStorage.setItem(this.collectionName, JSON.stringify(items))
 			return true;
 		}
 		return false;
     }
 
-    editTodo(){
-        
+    findItemById(itemId){
+        const items = this.getItems()
+        const foundItem = items.find(p => p.id == itemId);
+        return foundItem;
     }
 
-    filterTodo(){
-        
+    findItemByName(itemName){
+        const items = this.getItems()
+        const foundItem = items.find(p => p.label === itemName);
+        return foundItem;
     }
+
 }
 
 // module.exports = LocalBase

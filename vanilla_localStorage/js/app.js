@@ -1,20 +1,21 @@
 import { LocalBase } from "./ls.js";
 // const { LocalBase } = require("./ls.js");
+const $ = document.querySelector.bind(document);
+
 class TodoApp {
   constructor() {
     this.lb = new LocalBase("todo-List");
-    this.$ = document.querySelector.bind(document);
 
-    this.inputAdd = this.$("#add-input");
-    this.addBtn = this.$("#add-button");
-    this.cancelBtn = this.$("#cancel-btn");
-    this.todoList = this.$("#todo-list");
+    this.inputAdd = $("#add-input");
+    this.addBtn = $("#add-button");
+    this.cancelBtn = $("#cancel-btn");
+    this.todoList = $("#todo-list");
     // this.todoEl = $("p");
-    this.todoForm = this.$("#todo-form");
-    this.saveBtn = this.$("#save-btn");
+    this.todoForm = $("#todo-form");
+    this.saveBtn = $("#save-btn");
 
     this.editing = {
-      label: null,
+      todoItem: null,
       editBtn: null,
       removeBtn: null,
       cancelBtn: null,
@@ -38,7 +39,13 @@ class TodoApp {
   }
 
   saveEdit() {
-    this.editing.label.textContent = this.inputAdd.value;
+    const newLabel = this.inputAdd.value;
+
+    const findItem = this.lb.findItemById(this.editing.todoItem.id);
+
+    this.editing.todoItem.textContent = newLabel;
+    findItem.label = newLabel;
+    this.lb.saveItem(findItem);
     this.resetForm();
   }
 
@@ -52,12 +59,27 @@ class TodoApp {
     return btn;
   }
 
-  addTodo(label) {
-    const newTodo = this.lb.addItem({
-      label,
-      done: false,
-    });
-    this.createItem(newTodo);
+  addTodo(label){
+    const findItem = this.lb.findItemByName(label);
+    if(findItem){
+      // alert(`A tarefa "${label}" já existe!!`);
+      Swal.fire(`A tarefa "${label}" já existe!!`);
+      
+      this.inputAdd.value = "";
+      this.inputAdd.focus();
+    }
+    else if(this.inputAdd.value === ""){
+      this.inputAdd.focus();
+    }
+    else{
+      const newTodo = this.lb.addItem({
+        label,
+        done: false,
+      });
+  
+      this.createItem(newTodo);
+    }
+    
   }
 
   /**
@@ -70,19 +92,27 @@ class TodoApp {
    */
   createItem(pTodoItem) {
     const todoItem = document.createElement("div");
-    todoItem.setAttribute("class", "todo-item animated fadeInUp");
+    // pTodoItem.done ? todoItem.setAttribute("class", "todo-item animated fadeInUp done") 
+    //                : todoItem.setAttribute("class", "todo-item animated fadeInUp");
+
+    // todoItem.setAttribute("class", "todo-item animated fadeInUp")
+    // if (pTodoItem.done) {
+    //   todoItem.classList.add("done");
+    // }
+     todoItem.setAttribute("class", `todo-item animated fadeInUp ${pTodoItem.done ? " done" : ""}`);
+
     // todoItem.classList.add("todo-item");
 
     const description = document.createElement("div"); //.addClass("description");
     description.classList.add("description");
 
     const finishButton = this.makeHtmlButton(
-      pTodoItem.done ? "radio_button_checked" : "radio_button_unchecked",
-      "check",
+    pTodoItem.done ? "check_circle" : "radio_button_unchecked",
+    pTodoItem.done ? "done" : "", 
       "toggleCheck(this)"
     );
 
-    description.innerHTML = `${finishButton.outerHTML}<p>${pTodoItem.label}</p>`;
+    description.innerHTML = `${finishButton.outerHTML}<p id="${pTodoItem.id}">${pTodoItem.label}</p>`;
 
     const actions = document.createElement("div");
     actions.classList.add("actions");
@@ -122,12 +152,18 @@ class TodoApp {
 
     const todoItem = button.parentElement.parentElement;
 
+    const findItem = this.lb.findItemById(todoItem.querySelector('p').id);
+
     todoItem.classList.toggle("done");
     button.classList.toggle("done");
     const isDone = button.classList.contains("done");
     icon.innerHTML = isDone ? "check_circle" : "radio_button_unchecked";
 
-    const filterSelect = this.$("#filter-select");
+    findItem.done = isDone; 
+
+    this.lb.saveItem(findItem);
+
+    const filterSelect = $("#filter-select");
     if (filterSelect.value === "todo") {
       todoItem.classList.toggle("hide", isDone);
     }
@@ -138,9 +174,10 @@ class TodoApp {
   }
 
   removeTodo(todoItem) {
-    const label = todoItem.querySelector("p").textContent;
+    // const label = todoItem.querySelector("p").textContent;
+    const itemId = todoItem.querySelector("p").id;
     
-    const itemRemoved = this.lb.deleteItem(label);
+    const itemRemoved = this.lb.deleteItem(itemId);
     if(itemRemoved){
       todoItem.classList.add("slideOutLeft")
       setTimeout(() => {
@@ -152,8 +189,8 @@ class TodoApp {
   editTodo(todoItem) {
     this.resetForm();
 
-    this.editing.label = todoItem.querySelector("p");
-    this.inputAdd.value = this.editing.label.textContent;
+    this.editing.todoItem = todoItem.querySelector("p");
+    this.inputAdd.value = this.editing.todoItem.textContent;
     this.inputAdd.focus();
     this.addBtn.classList.add("hide");
     this.cancelBtn.classList.remove("hide");
@@ -184,7 +221,7 @@ class TodoApp {
 
   filterTodos() {
     const todos = this.todoList.querySelectorAll(".todo-item");
-    const filterSelect = this.$("#filter-select");
+    const filterSelect = $("#filter-select");
     todos.forEach((todo) => {
       switch (filterSelect.value) {
         case "all":

@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 :root{
     --iconColor: #a8adb5;
+    --primaryColor: #3793ff;
+    --secondaryColor: #3d3d3d;
+    --textColor: #ccc;
 }
 
 *{
@@ -14,6 +19,7 @@ body{
     display: flex;
     justify-content: center;
 }
+
 
 button {
     cursor: pointer;
@@ -130,7 +136,7 @@ input[type="text"]:focus{
 }
 
 p {
-    font-family: "GFS Neohellenic", sans-serif;
+    font-family: "Montserrat", "GFS Neohellenic", sans-serif;
 }
 
 .hide{
@@ -164,5 +170,21 @@ p {
     color: #fe5050;
 }
 
+.swal2-container {
+    background-color: #333;
+}
+.swal2-title {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Montserrat", "GFS Neohellenic", sans-serif;
+}
 
-
+.swal2-container {
+    background-color: #333;
+}
+.swal2-modal {	
+    background-color: #333;
+}
+.swal2-confirm {
+    background-color: #000;
+}
