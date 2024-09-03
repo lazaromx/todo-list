@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+  <link>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/animate.css">
+  </head>
+  <body>
+    <div class="todo-container">
+        <header>
+            <div class="title">
+                <h1>Todo List</h1>
+            </div> 
+        </header>
+        <form id="todo-form">
+            <h3>Adicionar Tarefa</h3>
+            <div class="todo-input">
+                <input id="add-input" type="text" placeholder="Nome da tarefa" maxlength="30"/>
+                <div class="form-btns">
+                    <button id="add-button" type="submit" class="form-btn add-button">Add</button>
+                    <button id="cancel-btn" class="form-btn hide" onclick="app.resetForm()">Cancel</button>
+                    <button id="save-btn" class="form-btn hide">Save</button>
+                </div>
+                
+            </div> 
+        </form>
+        <div id="toolbar">
+            <div id="filter">
+                <h4>Filtrar:</h4>
+                <select id="filter-select" onchange="app.filterTodos()">
+                    <option value="all">Todos</option>
+                    <option value="done">Feitos</option>
+                    <option value="todo">A fazer</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="todo-list">
+            <!-- <div class="todo-item animated fadeInUp">
+                <div class="description">
+                    <button class="btn-icon check" onclick="app.toggleCheck(this)">                        
+                        <i class="material-symbols-outlined">
+                            radio_button_unchecked
+                        </i>
+                    </button>
+                    <p>Exemplo</p>
+                </div>
+                <div class="actions">
+                    <button id="edit-item-btn" class="btn-icon edit" onclick="app.editTodo(this.parentElement.parentElement)">
+                        <i class="material-symbols-outlined">
+                            edit
+                        </i>
+                    </button>
+                    <button id="remove-item-btn" class="btn-icon delete" onclick="app.removeTodo(this.parentElement.parentElement)">
+                        <i class="material-symbols-outlined">
+                            delete
+                        </i>
+                    </button>
+                    <button id="cancel-item-btn" class="btn-icon cancel hide" onclick="app.resetForm()">
+                        <i class="material-symbols-outlined">
+                            cancel
+                        </i>
+                    </button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <script type ="module">
+        import app from "./js/app.js"; 
+        window.app = app;
+    </script>
+  </body>
+</html>

@@ -110,7 +110,7 @@ function removeTodo(todoItem){
 
   setTimeout(() => {
     todoItem.remove();
-  },400);
+  }, 400);
 }
 
 function editTodo(todoItem) {
