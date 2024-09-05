@@ -40,13 +40,27 @@ class TodoApp {
 
   saveEdit() {
     const newLabel = this.inputAdd.value;
+    const findItemName = this.lb.findItemByName(newLabel);
+    const findItemId = this.lb.findItemById(this.editing.todoItem.id);
 
-    const findItem = this.lb.findItemById(this.editing.todoItem.id);
+    if(findItemId && newLabel === findItemId.label) {
+      this.editing.todoItem.textContent = newLabel;
+      findItemId.label = newLabel;
+      this.lb.saveItem(findItemId);
+      this.resetForm();
+    }
 
-    this.editing.todoItem.textContent = newLabel;
-    findItem.label = newLabel;
-    this.lb.saveItem(findItem);
-    this.resetForm();
+    else if(findItemName){
+      // alert(`A tarefa "${label}" já existe!!`);
+      Swal.fire(`A tarefa "${newLabel}" já existe!!`);
+      
+      this.inputAdd.value = "";
+      this.inputAdd.focus();
+    }
+    
+
+
+    
   }
 
   makeHtmlButton(icon, className, event) {
