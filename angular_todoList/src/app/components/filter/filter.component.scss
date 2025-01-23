@@ -1,0 +1,22 @@
+.filter{
+    display: flex;
+    flex-direction: column;
+}
+
+h4{
+    color: #fff;
+    font-family: "Poppins", serif;
+
+}
+
+#options{
+    background-color: #2e2e2e;
+    color: #fff; 
+    width: fit-content;
+    margin-top: 5px;
+
+}
+option{
+    background-color: #2e2e2e;
+    color: #fff;
+}

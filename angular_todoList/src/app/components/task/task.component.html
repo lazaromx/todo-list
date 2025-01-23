@@ -1,0 +1,36 @@
+<!-- <div class="task">
+    <div class="description">
+        <span class="material-symbols-outlined">
+            radio_button_unchecked
+        </span>
+        <p>tarefa 1</p>
+    </div>
+    <div class="actions">
+        <span class="material-symbols-outlined" id="edit-btn">
+            edit
+        </span>
+        <span class="material-symbols-outlined" id="delete-btn">
+            delete
+        </span>
+    </div>  
+</div> -->
+@for(todo of todos; track $index){
+    <div class="task">
+        <div class="description">
+            <span class="material-symbols-outlined">
+                radio_button_unchecked
+            </span>
+            <p>{{valor}}</p>
+        </div>
+        <div class="actions">
+            <span class="material-symbols-outlined" id="edit-btn">
+                edit
+            </span>
+            <span class="material-symbols-outlined" id="delete-btn">
+                delete
+            </span>
+        </div>  
+    </div>
+}
+
+

@@ -1,0 +1,13 @@
+.title{
+    display: flex;
+    flex-direction: grid;
+    justify-content: center;
+}
+h1{
+    background: linear-gradient(to right,rgb(5, 250, 62), rgb(3, 194, 47), rgb(2, 160, 39));
+    background-size: 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Oswald", serif;;
+}

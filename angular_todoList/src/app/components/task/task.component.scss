@@ -1,0 +1,43 @@
+.task{    
+    color: #fff;
+    background-color: rgb(44, 44, 49);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 15px 0;
+
+    .description, .actions{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        gap:10px;
+        // padding: 10px;
+    }
+
+    .description{
+        justify-content: flex-start;
+    }
+
+    .actions{
+        justify-content: flex-end;
+    }
+}
+
+#edit-btn:hover{
+    color: #3d91fd;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#delete-btn:hover{
+    color: red;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+P{
+    font-family: "Montserrat", serif;
+    font-weight: 400;
+}

@@ -1,0 +1,10 @@
+<div class="task-form">
+    <form (ngSubmit)="submitTodo()" [formGroup]="todoForm">
+        <h3><label for="add-input">Adicionar tarefa</label></h3>
+        <div class="input-container">
+            <input type="text" id="add-input" placeholder="Adicionar Tarefa" [(ngModel)]="todo" formControlName="todo" required>
+            <button type="submit" class="add-button" [disabled]="!todoForm.valid">Add</button>
+        </div>
+    </form>
+</div>
+
